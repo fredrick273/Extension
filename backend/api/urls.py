@@ -3,5 +3,6 @@ from . import views
 
 
 urlpatterns = [
-    path('emailscan/',views.emailscan)
+    path('emailscan/',views.emailscan),
+    path('phishurl/',views.philurl)
 ]

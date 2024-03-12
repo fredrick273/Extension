@@ -10,15 +10,7 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
     if (temp_var){
    
     checkmail(temp_var[0].textContent);
-    var ele = document.getElementsByClassName("hj");
-if (ele.length > 0) {
-    var p = document.createElement('p');
-    p.textContent = "Scam";
-    // Assuming you want to append to the first element in the collection:
-    ele[0].appendChild(p);
-    console.log(ele);
-}
-
+    
     }
 
   });
@@ -32,6 +24,8 @@ if (ele.length > 0) {
 
 async function checkmail(content="") {
   console.log(content)
+  var ele = document.getElementsByClassName("hj");
+  var p = document.createElement('p');
   try {
     let response = await fetch("http://127.0.0.1:8000/api/emailscan/",{
       method: "POST",
@@ -48,7 +42,19 @@ async function checkmail(content="") {
     }
 
     const msg = await response.json();
-    console.log(msg);
+    if(msg.result == 1){
+      p.textContent = "Spam";
+      p.style.backgroundColor = "red";
+    } else{
+      p.textContent = "Not spam"
+      p.style.backgroundColor = "green";
+    }
+
+    if (ele.length > 0) {
+   
+      ele[0].appendChild(p);
+      console.log(ele);
+  }
   } catch (error) {
     console.error('There was a problem with the fetch operation:', error);
   }

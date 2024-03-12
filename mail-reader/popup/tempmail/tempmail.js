@@ -35,9 +35,12 @@ async function getmailfromid(user, domain, id) {
 }
 
 function createMailBar(email) {
-    const mailBar = document.createElement('a'); // Change from div to anchor element
+    const mailBar = document.createElement('div'); // Changed from anchor to div element
     mailBar.classList.add('mail-bar');
-    mailBar.href = `mail_detail.html?subject=${encodeURIComponent(email.subject)}&sender=${encodeURIComponent(email.from)}&message=${encodeURIComponent(email.body)}`; // Redirect to mail_detail.html with email details
+    mailBar.onclick = function() {
+        window.location.href = `mail_detail.html?subject=${encodeURIComponent(email.subject)}&sender=${encodeURIComponent(email.from)}&message=${encodeURIComponent(email.body)}`;
+    }; // Redirect to mail_detail.html with email details
+    
     mailBar.style.cursor = "pointer"; // Change cursor to indicate clickability
     
     const subject = document.createElement('p');
@@ -50,5 +53,6 @@ function createMailBar(email) {
     
     inboxContainer.appendChild(mailBar);
 }
+
 
 document.addEventListener("DOMContentLoaded", showmail);

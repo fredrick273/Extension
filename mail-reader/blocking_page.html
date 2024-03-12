@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blocked Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            text-align: center;
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #d9534f;
+        }
+
+        p {
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .proceed-button {
+            background-color: #5cb85c;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .proceed-button:hover {
+            background-color: #4cae4c;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Warning: Phishing Site Detected!</h1>
+        <p>The website you're trying to access has been identified as a potential phishing site.</p>
+        <p>Proceed with caution or return to safety.</p>
+        <button class="proceed-button" onclick="proceed()">Proceed Anyway</button>
+        <a href="#" onclick="goBack()">Go Back</a>
+    </div>
+
+    <script>
+        // Function to proceed anyway
+        function proceed() {
+            // Redirect the user to the original URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const originalUrl = urlParams.get('url');
+            if (originalUrl) {
+                window.location.href = originalUrl;
+            } else {
+                // Handle case where original URL is not provided
+                alert('Error: Original URL is missing.');
+            }
+        }
+
+        // Function to go back to the previous page
+        function goBack() {
+            window.history.back();
+        }
+    </script>
+</body>
+</html>

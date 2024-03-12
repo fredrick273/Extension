@@ -1,46 +1,56 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Browser Security Plus</title>
-    
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
-    <link rel="stylesheet" href="style.css">
-
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles2.css">
 </head>
-<body>
-    <div class="container">
 
-        <button id="mailbutton">Click me</button>
-        <h1>Browser Security Plus</h1>
-        
-        <div class="feature snip">
-            <h2>Browser Scan</h2>
-            <a id="scanNow" class="snip">Scan Now</a>
-            <a id="manageExtensions" class="snip">Manage</a>
+<body>
+
+    <div class="nav">
+        <div class="left">
+            <h2>ByteMe</h2>
         </div>
-        
-        <div class="feature snip">
-            <h2>Email Analysis</h2>
-            <a id="emailProtection" class="snip">Email Protection</a>
-            <a id="machineLearning" class="snip">ML Analysis</a>
-        </div>
-        
-        <div class="feature snip">
-            <h2>Temp Mail</h2>
-            <a href="temp-mail.html" id="generateTempMail" class="snip">Generate</a>
-        </div>
-        
-        <div class="feature snip">
-            <h2>Adblock</h2>
-            <a id="adBlocker" class="snip">Ad Blocker</a>
-            <a id="customization" class="snip">Customize</a>
+        <div class="right">
+            <i id="settings" class="fa fa-bars"></i>
         </div>
     </div>
 
-    <script src="script.js"></script>i
-</body>
-</html> 
+    <div class="grid-container">
+        <div class="row">
+            <div class="grid-item">
+                <img class="options" src="barcode-scanner.png" alt="">
+                <p>Browser Check</p>
+            </div>
 
+            <div  class="grid-item">
+                <img class="options" src="barcode-scanner.png" alt="">
+                <p>Email Analysis</p>
+            </div>
+        </div>
+
+        <div class="row">
+            <div id="temp-mail" class="grid-item">
+                <img class="options" src="barcode-scanner.png" alt="">
+                <p>Temp mail</p>
+            </div>
+            <div class="grid-item">
+                <img class="options" src="barcode-scanner.png" alt="">
+                <p>Adblock</p>
+            </div>
+        </div>
+
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>

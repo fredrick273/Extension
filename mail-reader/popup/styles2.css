@@ -1,0 +1,112 @@
+body {
+    background-color: #F5F5F5;
+    height: 450px;
+    width: 350px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    font-family: "Inter", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 260;
+    font-style: normal;
+    font-variation-settings: "slnt"0;
+}
+
+.nav {
+    display: flex;
+    justify-content: space-between;
+    width: 90%;
+}
+
+.left {
+    display: inherit;
+    font-size: 15px;
+}
+
+.right {
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#settings {
+    font-size: 30px;
+}
+
+
+.grid-container {
+
+    justify-content: center;
+    align-items: center;
+
+
+}
+
+.grid-item {
+    text-align: center;
+    padding: 25px 25px;
+    border-radius: 10px;
+
+}
+
+.grid-item:hover {
+    cursor: pointer;
+    background-color: lightgrey;
+    transition: background 0.3s, transform 0.3s;
+    transform: scale(1.05);
+    color: black;
+
+}
+
+.options {
+    height: 90px;
+    width: auto;
+}
+
+.row {
+    display: flex;
+
+}
+
+
+.container{
+    text-align: center;
+}
+
+#inbox-container {
+    margin-top: 20px;
+    
+}
+
+.mail-bar {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+.mail-bar p {
+    margin: 5px 0;
+    font-size: 14px;
+}
+
+.mail-bar p:first-child {
+    font-weight: bold;
+}
+
+/* Additional CSS for collapsible behavior */
+
+.message {
+    display: none; /* Initially hide the message */
+}
+
+.message.show {
+    display: block; /* Show the message when toggled */
+    margin-top: 10px; /* Add some space between subject/sender and message */
+    font-size: 14px; /* Adjust font size as needed */
+    color: #555; /* Adjust text color */
+}

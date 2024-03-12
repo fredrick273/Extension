@@ -1,4 +1,5 @@
 // tempmail.js
+
 const mailcontainer = document.querySelector('#mail');
 const inboxContainer = document.querySelector("#inbox-container");
 
@@ -9,7 +10,7 @@ async function showmail() {
     const mail = await response.json();
     console.log(mail);
     mailcontainer.innerText = mail[0];
-    setInterval(() => getmails(mail[0]), 5000); // Corrected the interval function
+    setInterval(() => getmails(mail[0]), 5000);
 }
 
 async function getmails(mailid) {
@@ -19,7 +20,7 @@ async function getmails(mailid) {
     const data = await response.json();
     console.log(inbox);
     if (data.length > 0){
-    getmailfromid(maildetails[0], maildetails[1], data[0].id); // Assuming data is an array and selecting the first mail
+    getmailfromid(maildetails[0], maildetails[1], data[0].id);
     }
 }
 
@@ -34,8 +35,10 @@ async function getmailfromid(user, domain, id) {
 }
 
 function createMailBar(email) {
-    const mailBar = document.createElement('div');
+    const mailBar = document.createElement('a'); // Change from div to anchor element
     mailBar.classList.add('mail-bar');
+    mailBar.href = `mail_detail.html?subject=${encodeURIComponent(email.subject)}&sender=${encodeURIComponent(email.from)}&message=${encodeURIComponent(email.body)}`; // Redirect to mail_detail.html with email details
+    mailBar.style.cursor = "pointer"; // Change cursor to indicate clickability
     
     const subject = document.createElement('p');
     subject.textContent = email.subject;
@@ -45,12 +48,7 @@ function createMailBar(email) {
     sender.textContent = 'From: ' + email.from;
     mailBar.appendChild(sender);
     
-    const message = document.createElement('p');
-    message.textContent = email.body;
-    mailBar.appendChild(message);
-    
     inboxContainer.appendChild(mailBar);
 }
-
 
 document.addEventListener("DOMContentLoaded", showmail);

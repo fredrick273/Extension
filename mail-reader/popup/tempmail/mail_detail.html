@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Email Detail</title>
+    <link rel="stylesheet" href="/popup/styles2.css">
+    <style>
+        
+#email-details {
+    margin-top: 20px;
+}
+
+#subject {
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+#sender {
+    font-size: 16px;
+    color: #666666;
+    margin-bottom: 5px;
+}
+
+#message {
+    font-size: 18px;
+    line-height: 1.6;
+    color: #333333;
+}
+    </style>
+</head>
+
+<body>
+
+    <div class="nav">
+        <div class="left">
+            <h2>ByteMe</h2>
+        </div>
+        <div class="right">
+            <i id="settings" class="fa fa-bars"></i>
+        </div>
+    </div>
+
+    <div class="container">
+        <header>
+            <h1>Email Detail</h1>
+        </header>
+
+        <section id="email-details">
+            <h2 id="subject"></h2>
+            <p id="sender"></p>
+            <p id="message"></p>
+        </section>
+    </div>
+
+    <script src="mail-detail.js"></script>
+
+</body>
+
+</html>

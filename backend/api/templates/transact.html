@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MetaMask Transaction Example</title>
+    <script src="https://cdn.jsdelivr.net/npm/web3@1.5.2/dist/web3.min.js"></script>
+</head>
+<body>
+    <h1>MetaMask Transaction Example</h1>
+
+    <button onclick="sendTransaction()">Send Transaction</button>
+
+    <script>
+        async function sendTransaction() {
+            // Initialize Web3 with MetaMask provider
+            if (window.ethereum) {
+                window.web3 = new Web3(window.ethereum);
+                try {
+                    // Request account access
+                    await window.ethereum.enable();
+                    console.log("MetaMask connected");
+
+                    // Get user's accounts
+                    const accounts = await web3.eth.getAccounts();
+                    const userAccount = accounts[0]; // Assuming the first account is the user's account
+
+                    // Example transaction data
+                    const txData = {
+                        from: userAccount,
+                        to: '0x769d7C7C7Df896eA072011138aF6fAdA876B9E3F', // Address you want to send ETH or token to
+                        value: web3.utils.toWei('0.1', 'ether'), // Amount to send (in wei)
+                    };
+
+                    // Send transaction
+                    const txHash = await web3.eth.sendTransaction(txData);
+                    console.log('Transaction hash:', txHash);
+                    alert('Transaction sent!');
+
+                } catch (error) {
+                    console.error('Error connecting to MetaMask:', error);
+                    alert('Error connecting to MetaMask: ' + error.message);
+                }
+            } else {
+                console.error('MetaMask not detected');
+                alert('MetaMask not detected');
+            }
+        }
+    </script>
+</body>
+</html>

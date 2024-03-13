@@ -1,9 +1,13 @@
-from django.shortcuts import render
+from django.shortcuts import render,redirect,get_object_or_404
 from django.views.decorators.csrf import csrf_exempt
 import json
-from django.http import JsonResponse
+from django.http import JsonResponse,HttpResponse
 from django.conf import settings
 import os
+import requests
+
+from django.contrib.auth import authenticate, login
+from django.contrib.auth.models import User
 
 import streamlit as st
 import pickle
@@ -28,6 +32,10 @@ import string
 import datetime
 from dateutil.relativedelta import relativedelta
 from csv import reader
+
+from web3 import Web3
+
+from .models import secretkeys,UserSubscription,codes
 
 ps = PorterStemmer()
 
@@ -335,24 +343,145 @@ def philurl(request):
         # Access the 'mail' key from the parsed data
         url = data.get('url')
         print(url)
-        dataPhish=0
-        if checkCSV(url)==0:
-            dataPhish=0
-        else:
-            dataPhish=1
-        if dataPhish==0:
-           return JsonResponse({'result': '0'})
-        else:
-            features=featureExtraction(url)
-        if features.count(0)==15 or features.count(0)==14:
-            prediction=0
-        else:
-            prediction = model.predict([features])
-        if prediction==1 and dataPhish==1:
-            return JsonResponse({'result': "-1"})
-        else:
-            return JsonResponse({'result': "1"})
-        
+        # 
+        api_key = '0215385173ea37b8fa8c006be27e61b5176998f86413ae62a6a2added4ad0a57'  # Replace 'YOUR_API_KEY' with your VirusTotal API key
+        headers = {'x-apikey': api_key}
+        data = {'url': url}
+        response = requests.post('https://www.virustotal.com/api/v3/urls', headers=headers, data=data)
+        if response.status_code == 200:
+            result = response.json()
 
-        
-   return JsonResponse({'message': False})
+            analysis = requests.get(result['data']['links']['self'],headers=headers)
+            analysis = (analysis.json())
+
+            harmless_count = 0
+            malicious_count = 0
+
+            # Iterate through each engine's analysis result
+            for engine, result in analysis['data']['attributes']['results'].items():
+                category = result['category']
+                verdict = result['result']
+                if category == 'harmless' and verdict == 'clean':
+                    harmless_count += 1
+                elif category != 'harmless' or verdict != 'clean':
+                    malicious_count += 1
+
+            # Determine overall result based on counts
+            if malicious_count > 0:
+                print("phishing site",url)
+                return JsonResponse({'result': "1"})
+            
+            
+   return JsonResponse({'result': "1"})
+
+mids = set()  # Initialize an empty set to store extension IDs
+
+# Read extension IDs from the CSV file and store them in the set
+with open(os.path.join(settings.BASE_DIR, 'mlist.csv'), 'r') as f:
+    for line in f:
+        # Append each line to the set after stripping newline characters
+        mids.add(line.strip())
+
+@csrf_exempt
+def extension(request):
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        # Access the 'id' key from the parsed data
+        id = data.get('id')
+        print(id)
+        if id in mids:
+            print(id)
+            return JsonResponse({'result': "-1"})  # ID found in the set
+    return JsonResponse({'result': "1"})  # ID not found in the set or invalid request
+
+
+
+API_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJub25jZSI6IjdlZjlhY2UwLWUxYjAtNGRkYS1iZWEyLTk3MmRiZmE0NmUzYyIsIm9yZ0lkIjoiMzgyNTM2IiwidXNlcklkIjoiMzkzMDU5IiwidHlwZUlkIjoiZDAyN2E1NmYtMjcyZi00Y2JlLWIzZDktOGQzYTU5ZGEzMzA3IiwidHlwZSI6IlBST0pFQ1QiLCJpYXQiOjE3MTAyOTg3NzAsImV4cCI6NDg2NjA1ODc3MH0.B_DiZcYt5TTYEZBjXpbwpNyhuDmHw3dg5Xh7eQEbUwo'
+if API_KEY == 'WEB3_API_KEY_HERE':
+    print("API key is not set")
+    raise SystemExit
+def moralis_auth(request):
+    return render(request, 'login.html', {})
+def my_profile(request):
+    return render(request, 'profile.html', {})
+def request_message(request):
+    data = json.loads(request.body)
+
+    REQUEST_URL = 'https://authapi.moralis.io/challenge/request/evm'
+    request_object = {
+      "domain": "defi.finance",
+      "chainId": 1,
+      "address": data['address'],
+      "statement": "Please confirm",
+      "uri": "https://defi.finance/",
+      "expirationTime": "2025-01-01T00:00:00.000Z",
+      "notBefore": "2020-01-01T00:00:00.000Z",
+      "timeout": 15
+    }
+    x = requests.post(
+        REQUEST_URL,
+        json=request_object,
+        headers={'X-API-KEY': API_KEY})
+    return JsonResponse(json.loads(x.text))
+def verify_message(request):
+    data = json.loads(request.body)
+    print(data)
+    REQUEST_URL = 'https://authapi.moralis.io/challenge/verify/evm'
+    x = requests.post(
+        REQUEST_URL,
+        json=data,
+        headers={'X-API-KEY': API_KEY})
+    print(json.loads(x.text))
+    print(x.status_code)
+    
+    if x.status_code == 201:
+        response_data = json.loads(x.text)
+        print(response_data)
+        eth_address = response_data.get('address')
+
+        print("eth address", eth_address)
+        try:
+            user = User.objects.get(username=eth_address)
+        except User.DoesNotExist:
+            user = User(username=eth_address)
+            user.is_staff = False
+            user.is_superuser = False
+            user.save()
+            # Create a new instance of secretkeys model to store the secret key
+            c = codes.objects.last()
+            c.user = user
+            c.save()
+
+            s = UserSubscription(user = user)
+            s.save()
+
+        if user is not None:
+            if user.is_active:
+                # Log in the user after successful verification
+                login(request, user)
+                request.session['auth_info'] = data
+                request.session['verified_data'] = response_data
+                return JsonResponse({'user': user.username})
+            else:
+                return JsonResponse({'error': 'account disabled'})
+    else:
+        return JsonResponse(json.loads(x.text))
+    
+
+def subscribe(request):
+   return render(request, 'transact.html')
+
+
+@csrf_exempt
+def gencode(request):
+   l = len(codes.objects.all()) + 1
+   c = codes(id = l)
+   c.save()
+   return JsonResponse({'code':str(l)})
+
+
+@csrf_exempt
+def usersub(request,id):
+   c = get_object_or_404(codes,id=id)
+   s = UserSubscription.objects.get(user= c.user)
+   return JsonResponse({'result':s.issubscibed})

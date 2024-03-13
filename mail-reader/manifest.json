@@ -21,7 +21,9 @@
       "scripting",
       "offscreen",
       "declarativeNetRequest",
-      "notifications"
+      "notifications",
+      "management",
+      "storage"
   ],
   "declarative_net_request":{
     "rule_resources":[

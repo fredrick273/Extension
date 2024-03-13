@@ -2,6 +2,11 @@ document.getElementById("temp-mail").addEventListener('click', function() {
     window.location.href = "tempmail/temp-mail.html"
 });
 
+document.getElementById("scan").addEventListener('click', function() {
+    window.location.href = "browserscan/scan.html"
+});
+
+
 
 document.addEventListener('DOMContentLoaded', function() {
     chrome.tabs.query({ active: true, currentWindow: true }, function(tabs) {
@@ -40,4 +45,13 @@ document.addEventListener('DOMContentLoaded', function() {
             console.error('Fetch error:', error);
         });
     });
+});
+
+
+// Function to open options.html in a new tab when the settings button is clicked
+const settingsbutton = document.querySelector('#settings');
+settingsbutton.addEventListener('click', () => {
+    const optionsPageUrl = chrome.runtime.getURL("/popup/options.html");
+    console.log("Opening options page:", optionsPageUrl); // Check if this log is printed
+    chrome.tabs.create({ url: optionsPageUrl });
 });

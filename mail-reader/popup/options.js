@@ -1,3 +1,5 @@
+const container = document.querySelector('#container');
+
 chrome.storage.sync.get(["key"], async function(result) {
     if (chrome.runtime.lastError) {
         console.error(chrome.runtime.lastError.message);
@@ -10,7 +12,16 @@ chrome.storage.sync.get(["key"], async function(result) {
             let data = await response.json();
             console.log(data);
             if(!data.result){
-                window.location.replace("http://127.0.0.1:8000/api/transact/");
+                let h = document.createElement('h2');
+                h.innerText = "You have not subscribed yet would you like to subscribe?";
+                container.appendChild(h)
+                let b = document.createElement('button')
+                b.addEventListener('click', ()=>{
+                    window.location.replace("http://127.0.0.1:8000/api/transact/");
+                })
+                b.innerText = "Yes";
+                container.appendChild(b);
+                
             }
         } else {
             console.log("Key 'key' is not present");

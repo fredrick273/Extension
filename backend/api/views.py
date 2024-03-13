@@ -468,8 +468,15 @@ def verify_message(request):
         return JsonResponse(json.loads(x.text))
     
 
-def subscribe(request):
-   return render(request, 'transact.html')
+def transact(request,id):
+   return render(request, 'transact.html',context={'id':id})
+
+def subscribe(request,id):
+   c = get_object_or_404(codes,id=id)
+   s = UserSubscription.objects.get(user= c.user)
+   s.issubscibed = True
+   s.save()
+   return HttpResponse("Subscribed")
 
 
 @csrf_exempt

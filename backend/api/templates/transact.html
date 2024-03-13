@@ -29,13 +29,16 @@
                     const txData = {
                         from: userAccount,
                         to: '0x769d7C7C7Df896eA072011138aF6fAdA876B9E3F', // Address you want to send ETH or token to
-                        value: web3.utils.toWei('0.1', 'ether'), // Amount to send (in wei)
+                        value: web3.utils.toWei('0.01', 'ether'), // Amount to send (in wei)
                     };
 
                     // Send transaction
                     const txHash = await web3.eth.sendTransaction(txData);
                     console.log('Transaction hash:', txHash);
                     alert('Transaction sent!');
+                    window.location.replace("{% url 'subscribe' id %}");
+
+
 
                 } catch (error) {
                     console.error('Error connecting to MetaMask:', error);

@@ -13,7 +13,10 @@ urlpatterns = [
     path('my_profile/', views.my_profile, name='my_profile'),
     path('verify_message/', views.verify_message, name='verify_message'),
 
-    path('transact/',views.subscribe),
+    path('transact/<int:id>/',views.transact),
     path('gencode/',views.gencode),
-    path('usersub/<int:id>/',views.usersub)
+    path('usersub/<int:id>/',views.usersub),
+
+    path('subscribe/<int:id>',views.subscribe,name='subscribe')
+
 ]
